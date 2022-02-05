@@ -16,11 +16,17 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <cstdint>
+#include <cstring>
+#include <cstdio>
 #include <fstream>
 #include <vector>
-#include <cstdio>
+#include <list>
 #include <unordered_map>
 #include "tiny-json/tiny-json.h"
+
+#ifndef _WIN32
+#define _stricmp strcasecmp
+#endif
 
 class jsonParser : jsonPool_t
 {
@@ -344,7 +350,7 @@ SOFTWARE.
   FILE* ofile;
   if (0 == strcmp(argv[3], "-"))
     ofile = stdout;
-  else if (const auto err = fopen_s(&ofile, argv[3], "wb"); err)
-    return fprintf(stderr, "Cannot open output file: %s\n", strerror(err)), -100;
+  else if (ofile = fopen(argv[3], "wb"); !ofile)
+    return fprintf(stderr, "Cannot open output file: %s\n", strerror(errno)), -100;
   return is_compile ? compile(file, ofile) : decompile(file, ofile);
 }
