@@ -24,10 +24,6 @@
 #include <unordered_map>
 #include "tiny-json/tiny-json.h"
 
-#ifndef _WIN32
-#define _stricmp strcasecmp
-#endif
-
 class jsonParser : jsonPool_t
 {
   static json_t* alloc_fn(jsonPool_t* pool)
@@ -306,7 +302,7 @@ int main(int argc, char** argv)
   auto invocation = strrchr(argv[0], '\\');
   invocation = invocation ? invocation + 1 : argv[0];
   bool is_compile{};
-  if (argc < 4 || (!(is_compile = 0 == _stricmp(argv[1], "compile")) && 0 != _stricmp(argv[1], "decompile")))
+  if (argc < 4 || (!(is_compile = 0 == strcmp(argv[1], "compile")) && 0 != strcmp(argv[1], "decompile")))
     return fprintf(stderr, "Usage: %s [compile|decompile] [INPUT] [OUTPUT]\n"
       R"(
 Copyright (C) 2022  namazso <admin@namazso.eu>
